@@ -1,0 +1,46 @@
+---
+driver:
+  name: openstack
+openstack:
+  keyfile: /ssh/id_rsa
+  instances:
+    - name: molecule-docker-cobbler-ubuntu
+      image: 'Ubuntu 16.04'
+      flavor: vps-ssd-1
+      sshuser: ubuntu
+      ssh_timeout: 120
+      ansible_groups:
+        - molecule
+        - ubuntu
+      security_groups:
+        - ssh
+    - name: molecule-docker-cobbler-centos
+      image: 'Centos 7'
+      flavor: vps-ssd-1
+      sshuser: centos
+      ssh_timeout: 120
+      ansible_groups:
+        - centos
+        - molecule
+      security_groups:
+        - ssh
+ansible:
+  playbook: playbook.yml
+  timeout: 120
+dependency:
+  name: galaxy
+  requirements_file: requirements.yml
+verifier:
+  name: testinfra
+  enabled: False
+molecule:
+  ignore_paths:
+    - .git
+    - .molecule
+    - .tox
+  test:
+    sequence:
+      - destroy
+      - create
+      - converge
+      - destroy

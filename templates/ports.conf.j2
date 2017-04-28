@@ -1,0 +1,4 @@
+Listen 80
+{% if cobbler_http_port|default(80) != 80 %}
+Listen {{ cobbler_http_port }}
+{% endif %}

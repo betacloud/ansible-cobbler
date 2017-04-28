@@ -1,0 +1,95 @@
+# This file is subject to the terms and conditions defined in file 'LICENSE',
+# which is part of this repository.
+---
+- name: Create configuration directory
+  file:
+    state: directory
+    path: /opt/cobbler-configuration
+    mode: 0755
+    owner: "{{ operator_user }}"
+    group: "{{ operator_user }}"
+  become: true
+
+- name: Create data directory
+  file:
+    state: directory
+    path: /opt/cobbler-data
+    mode: 0755
+    owner: "{{ operator_user }}"
+    group: "{{ operator_user }}"
+  become: true
+
+- name: Create www directory
+  file:
+    state: directory
+    path: /opt/cobbler-www
+    mode: 0755
+    owner: "{{ operator_user }}"
+    group: "{{ operator_user }}"
+  become: true
+
+- name: Copy configuration templates
+  template:
+    src: "{{ item }}.j2"
+    dest: "/opt/cobbler-configuration/{{ item }}"
+    mode: 0644
+    owner: "{{ operator_user }}"
+    group: "{{ operator_user }}"
+  with_items:
+    - 000-default.conf
+    - dhcp.template
+    - isc-dhcp-server
+    - ports.conf
+    - settings
+  become: false
+
+- name: Pull docker image
+  docker_image:
+    name: "{{ cobbler_docker_image }}"
+
+- name: Prepare volume list
+  set_fact:
+    cobbler_volumes:
+      - "/opt/cobbler-data:/var/lib/cobbler"
+      - "/opt/cobbler-www:/srv/www/cobbler"
+      - "/opt/cobbler-configuration/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro"
+      - "/opt/cobbler-configuration/dhcp.template:/etc/cobbler/dhcp.template:ro"
+      - "/opt/cobbler-configuration/isc-dhcp-server:/etc/default/isc-dhcp-server:ro"
+      - "/opt/cobbler-configuration/ports.conf:/etc/apache2/ports.conf:ro"
+      - "/opt/cobbler-configuration/settings:/etc/cobbler/settings:ro"
+
+- name: Start container
+  docker_container:
+    name: bc-cobbler
+    image: "{{ cobbler_docker_image }}"
+    state: started
+    recreate: yes
+    restart_policy: always
+    volumes: "{{ cobbler_volumes }}"
+    ports:
+      - "{{ cobbler_host }}:{{ cobbler_dhcp_port }}:69"
+      - "{{ cobbler_host }}:{{ cobbler_http_port }}:80"
+
+- name: Wait for availability of service
+  wait_for:
+    host: "{{ cobbler_host }}"
+    port: "{{ cobbler_http_port }}"
+    delay: 10
+
+- name: Get loaders
+  command: "docker exec -t bc-cobbler cobbler get-loaders"
+  changed_when: false
+
+- name: Sync cobbler
+  command: "docker exec -t bc-cobbler cobbler sync"
+  changed_when: false
+
+- name: Copy profiles
+  copy:
+    src: "{{ item }}"
+    dest: "/opt/cobbler-data/kickstarts/{{ item|basename }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_fileglob: "profiles/*"
+  become: true

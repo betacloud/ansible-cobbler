@@ -1,0 +1,15 @@
+{% if cobbler_http_port|default(80) != 80 %}
+<VirtualHost *:{{ cobbler_http_port }}>
+  ServerAdmin {{ cobbler_mail_address }}
+  DocumentRoot /var/www/html
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+{% endif %}
+
+<VirtualHost *:80>
+  ServerAdmin {{ cobbler_mail_address }}
+  DocumentRoot /var/www/html
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
