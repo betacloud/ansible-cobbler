@@ -1,0 +1,44 @@
+# This file is subject to the terms and conditions defined in file 'LICENSE',
+# which is part of this repository.
+---
+- name: Create configuration directory
+  file:
+    state: directory
+    path: /opt/cobbler-configuration
+    mode: 0755
+    owner: "{{ operator_user }}"
+    group: "{{ operator_user }}"
+  become: true
+
+- name: Create data directory
+  file:
+    state: directory
+    path: /opt/cobbler-data
+    mode: 0755
+    owner: "{{ operator_user }}"
+    group: "{{ operator_user }}"
+  become: true
+
+- name: Create www directory
+  file:
+    state: directory
+    path: /opt/cobbler-www
+    mode: 0755
+    owner: "{{ operator_user }}"
+    group: "{{ operator_user }}"
+  become: true
+
+- name: Copy configuration templates
+  template:
+    src: "{{ item }}.j2"
+    dest: "/opt/cobbler-configuration/{{ item }}"
+    mode: 0644
+    owner: "{{ operator_user }}"
+    group: "{{ operator_user }}"
+  with_items:
+    - 000-default.conf
+    - dhcp.template
+    - isc-dhcp-server
+    - ports.conf
+    - settings
+  become: false

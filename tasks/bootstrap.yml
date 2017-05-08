@@ -1,0 +1,26 @@
+# This file is subject to the terms and conditions defined in file 'LICENSE',
+# which is part of this repository.
+---
+- name: Wait for availability of service
+  wait_for:
+    host: "{{ cobbler_host }}"
+    port: "{{ cobbler_http_port }}"
+    delay: 10
+
+- name: Get loaders
+  command: "docker exec -t bc-cobbler cobbler get-loaders"
+  changed_when: false
+
+- name: Sync cobbler
+  command: "docker exec -t bc-cobbler cobbler sync"
+  changed_when: false
+
+- name: Copy profiles
+  copy:
+    src: "{{ item }}"
+    dest: "/opt/cobbler-data/kickstarts/{{ item|basename }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_fileglob: "profiles/*"
+  become: true

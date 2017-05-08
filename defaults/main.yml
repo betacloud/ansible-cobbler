@@ -1,4 +1,6 @@
 ---
+action: deploy
+
 # cobbler_dhcp_interface:
 cobbler_dhcp_port: 69
 cobbler_host: "{{ ansible_default_ipv4.address }}"

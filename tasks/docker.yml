@@ -1,0 +1,29 @@
+# This file is subject to the terms and conditions defined in file 'LICENSE',
+# which is part of this repository.
+---
+- name: Pull docker image
+  docker_image:
+    name: "{{ cobbler_docker_image }}"
+
+- name: Prepare volume list
+  set_fact:
+    cobbler_volumes:
+      - "/opt/cobbler-data:/var/lib/cobbler"
+      - "/opt/cobbler-www:/srv/www/cobbler"
+      - "/opt/cobbler-configuration/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro"
+      - "/opt/cobbler-configuration/dhcp.template:/etc/cobbler/dhcp.template:ro"
+      - "/opt/cobbler-configuration/isc-dhcp-server:/etc/default/isc-dhcp-server:ro"
+      - "/opt/cobbler-configuration/ports.conf:/etc/apache2/ports.conf:ro"
+      - "/opt/cobbler-configuration/settings:/etc/cobbler/settings:ro"
+
+- name: Start container
+  docker_container:
+    name: bc-cobbler
+    image: "{{ cobbler_docker_image }}"
+    state: started
+    recreate: yes
+    restart_policy: always
+    volumes: "{{ cobbler_volumes }}"
+    ports:
+      - "{{ cobbler_host }}:{{ cobbler_dhcp_port }}:69"
+      - "{{ cobbler_host }}:{{ cobbler_http_port }}:80"
