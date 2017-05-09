@@ -109,7 +109,7 @@ default_ownership:
 # The simplest way to change the password is to run 
 # openssl passwd -1
 # and put the output between the "" below.
-default_password_crypted: "$1$mF86/UHC$WvcIcX2t6crBz2onWxyac."
+default_password_crypted: "$1$random-p$x29oupj2p46Lu8ahtLX2S."
 
 # the default template type to use in the absence of any
 # other detected template. If you do not specify the template 
@@ -320,7 +320,7 @@ reposync_flags: "-l -n -d"
 # Note that if manage_dhcp and manage_dns are disabled, the respective
 # parameter will have no effect.  Most users should not need to change
 # this.
-restart_dns: 1
+restart_dns: 0
 restart_dhcp: 1
 
 # install triggers are scripts in /var/lib/cobbler/triggers/install
@@ -354,7 +354,7 @@ server: {{ cobbler_host }}
 # instead of using the above value which can force commands like
 # cobbler sync to open a connection to a remote address if one is in the
 # configuration and would traceback.
-client_use_localhost: 1
+client_use_localhost: 0
 
 # If set to 1, all commands to the API (not directly to the XMLRPC
 # server) will go over HTTPS instead of plaintext. Be sure to change

@@ -24,6 +24,4 @@
     recreate: yes
     restart_policy: always
     volumes: "{{ cobbler_volumes }}"
-    ports:
-      - "{{ cobbler_host }}:{{ cobbler_dhcp_port }}:69"
-      - "{{ cobbler_host }}:{{ cobbler_http_port }}:80"
+    network_mode: host

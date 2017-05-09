@@ -1,15 +1,21 @@
 ---
 action: deploy
 
-# cobbler_dhcp_interface:
-cobbler_dhcp_port: 69
+# http parameters
+
 cobbler_host: "{{ ansible_default_ipv4.address }}"
-cobbler_http_port: 10080
+cobbler_http_port: 80
 cobbler_mail_address: cobbler@betacloud.io
-cobbler_nameserver: 172.17.10.10
-cobbler_netmask: 255.255.0.0
-cobbler_router: 172.17.10.10
-cobbler_subnet: 172.17.0.0
+
+# dhcp parameters
+
+# cobbler_dhcp_interface:
+cobbler_dhcp_nameserver: 172.17.10.10
+cobbler_dhcp_netmask: 255.255.0.0
+cobbler_dhcp_router: 172.17.10.10
+cobbler_dhcp_subnet: 172.17.0.0
+
+# docker parameters
 
 cobbler_version: 2.8
 cobbler_docker_image: "betacloud/cobbler:{{ cobbler_version }}"

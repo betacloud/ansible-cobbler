@@ -18,10 +18,10 @@ set vendorclass = option vendor-class-identifier;
 
 option pxe-system-type code 93 = unsigned integer 16;
 
-subnet {{ cobbler_subnet }} netmask {{ cobbler_netmask }} {
-     option routers             {{ cobbler_router }};
-     option domain-name-servers {{ cobbler_nameserver }};
-     option subnet-mask         {{ cobbler_netmask }};
+subnet {{ cobbler_dhcp_subnet }} netmask {{ cobbler_dhcp_netmask }} {
+     option routers             {{ cobbler_dhcp_router }};
+     option domain-name-servers {{ cobbler_dhcp_nameserver }};
+     option subnet-mask         {{ cobbler_dhcp_netmask }};
      default-lease-time         21600;
      max-lease-time             43200;
      next-server                $next_server;
