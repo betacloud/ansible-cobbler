@@ -1,0 +1,38 @@
+# This file is subject to the terms and conditions defined in file 'LICENSE',
+# which is part of this repository.
+---
+- name: Check if profile exists
+  cobbler:
+    username: "{{ cobbler_username }}"
+    password: "{{ cobbler_password }}"
+    server_url: "{{ cobbler_server_url }}"
+    entity: profile
+    action: has
+    params:
+      name: "{{ profile.name }}"
+
+- set_fact:
+    profile_exists: "{{ cobbler_result }}"
+
+- name: Prepare params
+  set_fact:
+    profile_params: 
+      name: "{{ profile.name }}"
+      kickstart: "/var/lib/cobbler/kickstarts/{{ profile.file|basename }}"
+
+- name: Copy profile
+  copy:
+    src: "{{ profile.file }}"
+    dest: "{{ cobbler_data_directory}}/kickstarts/{{ profile.file|basename }}"
+  become: true
+  when: not profile_exists
+
+- name: Add profile
+  cobbler:
+    username: "{{ cobbler_username }}"
+    password: "{{ cobbler_password }}"
+    server_url: "{{ cobbler_server_url }}"
+    entity: profile
+    action: new
+    params: "{{ profile_params | combine(profile.params) }}"
+  when: not profile_exists

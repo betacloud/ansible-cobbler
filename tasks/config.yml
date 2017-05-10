@@ -4,7 +4,7 @@
 - name: Create configuration directory
   file:
     state: directory
-    path: /opt/cobbler-configuration
+    path: "{{ cobbler_configuration_directory }}"
     mode: 0755
     owner: "{{ operator_user }}"
     group: "{{ operator_user }}"
@@ -13,7 +13,16 @@
 - name: Create data directory
   file:
     state: directory
-    path: /opt/cobbler-data
+    path: "{{ cobbler_data_directory }}"
+    mode: 0755
+    owner: "{{ operator_user }}"
+    group: "{{ operator_user }}"
+  become: true
+
+- name: Create image directory
+  file:
+    state: directory
+    path: "{{ cobbler_image_directory }}"
     mode: 0755
     owner: "{{ operator_user }}"
     group: "{{ operator_user }}"
@@ -22,7 +31,7 @@
 - name: Create www directory
   file:
     state: directory
-    path: /opt/cobbler-www
+    path: "{{ cobbler_www_directory }}"
     mode: 0755
     owner: "{{ operator_user }}"
     group: "{{ operator_user }}"
@@ -31,7 +40,7 @@
 - name: Copy configuration templates
   template:
     src: "{{ item }}.j2"
-    dest: "/opt/cobbler-configuration/{{ item }}"
+    dest: "{{ cobbler_configuration_directory }}/{{ item }}"
     mode: 0644
     owner: "{{ operator_user }}"
     group: "{{ operator_user }}"
@@ -41,4 +50,19 @@
     - isc-dhcp-server
     - ports.conf
     - settings
+    - tftpd.template
   become: false
+
+# https://unix.stackexchange.com/questions/45964/scripting-htdigest-c-path-to-file-user-user-password-in-bash
+- name: Generate htdigest
+  shell: "echo -n '{{ cobbler_username }}:Cobbler:' && echo -n '{{ cobbler_username }}:Cobbler:{{ cobbler_password }}' | md5sum | awk '{ print $1 }'"
+  register: htdigest
+  no_log: true
+
+- name: Create htdigest file
+  copy:
+    content: "{{ htdigest.stdout }}\n"
+    dest: "{{ cobbler_configuration_directory }}/users.digest"
+    mode: 0644
+    owner: "{{ operator_user }}"
+    group: "{{ operator_user }}"

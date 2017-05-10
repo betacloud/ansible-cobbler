@@ -1,0 +1,30 @@
+# This file is subject to the terms and conditions defined in file 'LICENSE',
+# which is part of this repository.
+---
+- name: Check if system exists
+  cobbler:
+    username: "{{ cobbler_username }}"
+    password: "{{ cobbler_password }}"
+    server_url: "{{ cobbler_server_url }}"
+    entity: system
+    action: has
+    params:
+      name: "{{ system.name }}"
+
+- name: Prepare params
+  set_fact:
+    system_params:
+      name: "{{ system.name }}"
+
+- set_fact:
+    system_exists: "{{ cobbler_result }}"
+
+- name: Add system
+  cobbler:
+    username: "{{ cobbler_username }}"
+    password: "{{ cobbler_password }}"
+    server_url: "{{ cobbler_server_url }}"
+    entity: system
+    action: new
+    params: "{{ system_params | combine(system.params) }}"
+  when: not system_exists

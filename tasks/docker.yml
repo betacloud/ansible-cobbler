@@ -8,17 +8,20 @@
 - name: Prepare volume list
   set_fact:
     cobbler_volumes:
-      - "/opt/cobbler-data:/var/lib/cobbler"
-      - "/opt/cobbler-www:/srv/www/cobbler"
-      - "/opt/cobbler-configuration/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro"
-      - "/opt/cobbler-configuration/dhcp.template:/etc/cobbler/dhcp.template:ro"
-      - "/opt/cobbler-configuration/isc-dhcp-server:/etc/default/isc-dhcp-server:ro"
-      - "/opt/cobbler-configuration/ports.conf:/etc/apache2/ports.conf:ro"
-      - "/opt/cobbler-configuration/settings:/etc/cobbler/settings:ro"
+      - "{{ cobbler_image_directory }}:/mnt"
+      - "{{ cobbler_data_directory }}:/var/lib/cobbler"
+      - "{{ cobbler_www_directory }}:/srv/www/cobbler"
+      - "{{ cobbler_configuration_directory }}/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro"
+      - "{{ cobbler_configuration_directory }}/dhcp.template:/etc/cobbler/dhcp.template:ro"
+      - "{{ cobbler_configuration_directory }}/isc-dhcp-server:/etc/default/isc-dhcp-server:ro"
+      - "{{ cobbler_configuration_directory }}/ports.conf:/etc/apache2/ports.conf:ro"
+      - "{{ cobbler_configuration_directory }}/settings:/etc/cobbler/settings:ro"
+      - "{{ cobbler_configuration_directory }}/tftpd.template:/etc/cobbler/tftpd.template:ro"
+      - "{{ cobbler_configuration_directory }}/users.digest:/etc/cobbler/users.digest:ro"
 
 - name: Start container
   docker_container:
-    name: bc-cobbler
+    name: "{{ cobbler_docker_container_name }}"
     image: "{{ cobbler_docker_image }}"
     state: started
     recreate: yes

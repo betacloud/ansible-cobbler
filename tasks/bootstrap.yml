@@ -1,26 +1,30 @@
 # This file is subject to the terms and conditions defined in file 'LICENSE',
 # which is part of this repository.
 ---
-- name: Wait for availability of service
-  wait_for:
-    host: "{{ cobbler_host }}"
-    port: "{{ cobbler_http_port }}"
-    delay: 10
+- include: wait-for-service.yml
 
-- name: Get loaders
-  command: "docker exec -t bc-cobbler cobbler get-loaders"
-  changed_when: false
+- include: task-sync.yml
 
-- name: Sync cobbler
-  command: "docker exec -t bc-cobbler cobbler sync"
-  changed_when: false
+- include: bootstrap-import.yml
 
-- name: Copy profiles
+- include: bootstrap-profile.yml
+
+- include: bootstrap-system.yml
+
+- include: bootstrap-repository.yml
+
+- include: task-restart.yml
+
+- include: wait-for-service.yml
+
+- include: task-sync.yml
+
+#- include: task-reposync.yml
+
+- name: Copy public SSH key
   copy:
-    src: "{{ item }}"
-    dest: "/opt/cobbler-data/kickstarts/{{ item|basename }}"
-    owner: root
-    group: root
-    mode: 0644
-  with_fileglob: "profiles/*"
+    content: "{{ cobbler_public_key }}"
+    dest: "{{ cobbler_www_directory }}/pub/cobbler.pub"
+    owner: "{{ operator_user }}"
+    mode: 0600
   become: true

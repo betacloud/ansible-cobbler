@@ -1,0 +1,9 @@
+# This file is subject to the terms and conditions defined in file 'LICENSE',
+# which is part of this repository.
+---
+- name: Sync cobbler
+  cobbler:
+    server_url: "http://{{ cobbler_host }}:{{ cobbler_http_port }}/cobbler_api"
+    username: "{{ cobbler_username }}"
+    password: "{{ cobbler_password }}"
+    action: sync

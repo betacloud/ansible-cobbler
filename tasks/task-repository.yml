@@ -1,0 +1,30 @@
+# This file is subject to the terms and conditions defined in file 'LICENSE',
+# which is part of this repository.
+---
+- name: Check if repository exists
+  cobbler:
+    username: "{{ cobbler_username }}"
+    password: "{{ cobbler_password }}"
+    server_url: "{{ cobbler_server_url }}"
+    entity: repo
+    action: has
+    params:
+      name: "{{ repository.name }}"
+
+- name: Prepare params
+  set_fact:
+    repository_params:
+      name: "{{ repository.name }}"
+
+- set_fact:
+    repository_exists: "{{ cobbler_result }}"
+
+- name: Add repository
+  cobbler:
+    username: "{{ cobbler_username }}"
+    password: "{{ cobbler_password }}"
+    server_url: "{{ cobbler_server_url }}"
+    entity: repo
+    action: new
+    params: "{{ repository_params | combine(repository.params) }}"
+  when: not repository_exists

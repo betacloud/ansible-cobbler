@@ -1,0 +1,61 @@
+# This file is subject to the terms and conditions defined in file 'LICENSE',
+# which is part of this repository.
+---
+- name: Check if distro exists
+  cobbler:
+    username: "{{ cobbler_username }}"
+    password: "{{ cobbler_password }}"
+    server_url: "{{ cobbler_server_url }}"
+    entity: distro
+    action: has
+    params:
+      name: "{{ distro.name }}-{{ distro.arch }}"
+
+- set_fact:
+    distro_exists: "{{ cobbler_result }}"
+
+- name: Download ISO file
+  get_url:
+    url: "{{ distro.url }}"
+    dest: "{{ cobbler_image_directory }}/{{ distro.name }}.iso"
+  when: not distro_exists
+
+- name: Mount ISO files
+  mount:
+    name: "{{ cobbler_image_directory }}/{{ distro.name }}"
+    src: "{{ cobbler_image_directory }}/{{ distro.name }}.iso"
+    state: mounted
+    fstype: iso9660
+    opts: "loop,ro"
+  become: true
+  when: not distro_exists
+
+# NOTE: Mounted files only visible after a restart of the container
+- include: task-restart.yml
+  when: not distro_exists
+
+- include: wait-for-service.yml
+  when: not distro_exists
+
+- name: Import files from mounted ISO file
+  command: "docker exec -t {{ cobbler_docker_container_name }} cobbler import --name {{ distro.name }} --path /mnt/{{ distro.name }} --arch {{ distro.arch }}"
+  when: not distro_exists
+
+#- name: Import files from mounted ISO file
+#  cobbler:
+#    server_url: "http://{{ cobbler_host }}:{{ cobbler_http_port }}/cobbler_api"
+#    username: "{{ cobbler_username }}"
+#    password: "{{ cobbler_password }}"
+#    action: import
+#    params:
+#      name: "{{ distro.name }}"
+#      arch: "{{ distro.arch }}"
+#      path: "/mnt/{{ distro.name }}"
+#  when: not distro_exists
+
+- name: Unmount ISO files
+  mount:
+    name: "{{ cobbler_image_directory }}/{{ distro.name }}"
+    state: unmounted
+  become: true
+  when: not distro_exists
