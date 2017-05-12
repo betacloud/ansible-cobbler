@@ -12,7 +12,7 @@ d-i	netcfg/confirm_static	boolean true
 d-i	clock-setup/utc	boolean true
 d-i	mirror/country string manual
 d-i	mirror/http/hostname string $http_server
-d-i	mirror/http/directory string /cobbler/ks_mirror/ubuntu-server-xenial
+d-i	mirror/http/directory string /cobbler/ks_mirror/ubuntu-server-xenial-x86_64
 d-i	mirror/http/proxy string
 d-i     partman-basicmethods/method_only boolean false
 d-i     partman-auto-lvm/new_vg_name string system
@@ -73,7 +73,7 @@ d-i     partman-auto/expert_recipe string \
 d-i 	clock-setup/utc boolean true
 d-i	clock-setup/ntp	boolean true
 d-i	clock-setup/ntp-server	string de.pool.ntp.org
-d-i	live-installer/net-image string http://$http_server/cobbler/ks_mirror/ubuntu-server-xenial/install/filesystem.squashfs
+d-i	live-installer/net-image string http://$http_server/cobbler/ks_mirror/ubuntu-server-xenial-x86_64/install/filesystem.squashfs
 d-i	base-installer/kernel/image	string linux-server
 d-i	passwd/root-login	boolean true
 d-i	passwd/make-user	boolean false
