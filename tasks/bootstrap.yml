@@ -26,5 +26,5 @@
     content: "{{ cobbler_public_key }}"
     dest: "{{ cobbler_www_directory }}/pub/cobbler.pub"
     owner: "{{ operator_user }}"
-    mode: 0600
+    mode: 0644
   become: true
