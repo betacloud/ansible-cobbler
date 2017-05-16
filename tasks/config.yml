@@ -66,3 +66,12 @@
     mode: 0644
     owner: "{{ operator_user }}"
     group: "{{ operator_user }}"
+
+- name: Copy cobbler wrapper script
+  template:
+    src: cobbler.j2
+    dest: /usr/local/bin/cobbler
+    mode: 0755
+    owner: root
+    group: root
+  become: true
