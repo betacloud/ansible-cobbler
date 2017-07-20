@@ -20,7 +20,7 @@
     include_vars: vars/vagrant.yml
 
   roles:
-  - role: betacloud.docker
+  - role: osism.docker
 
 - name: Playbook for role testing
   hosts: all

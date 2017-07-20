@@ -13,7 +13,7 @@ cobbler_www_directory: /opt/cobbler-www
 cobbler_host: "{{ ansible_default_ipv4.address }}"
 cobbler_http_port: 80
 cobbler_server_url: "http://{{ cobbler_host }}:{{ cobbler_http_port }}/cobbler_api"
-cobbler_mail_address: cobbler@betacloud.io
+cobbler_mail_address: cobbler@osism.io
 
 # distributions
 
@@ -74,7 +74,7 @@ cobbler_password: cobbler
 # docker parameters
 
 cobbler_version: 2.8
-cobbler_docker_image: "betacloud/cobbler:{{ cobbler_version }}"
-cobbler_docker_container_name: bc-cobbler
+cobbler_docker_image: "osism/cobbler:{{ cobbler_version }}"
+cobbler_docker_container_name: osism-cobbler
 
 operator_user: "{{ ansible_user }}"

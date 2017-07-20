@@ -1,3 +1,3 @@
 ---
-- name: betacloud.docker
-  src: git+https://github.com/betacloud/ansible-docker.git
+- name: osism.docker
+  src: git+https://github.com/osism/ansible-docker.git

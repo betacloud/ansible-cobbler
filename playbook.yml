@@ -19,7 +19,7 @@
     include_vars: vars/molecule.yml
 
   roles:
-  - role: betacloud.docker
+  - role: osism.docker
 
 - name: Playbook for role testing
   hosts: all

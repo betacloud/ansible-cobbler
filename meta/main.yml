@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Christian Berendt
-  description: Ansible wrapper role for betacloud/cobbler Docker image.
+  description: Wrapper role for osism/cobbler docker image.
   company: Betacloud Solutions GmbH
   license: Apache License 2.0
   min_ansible_version: 2.2
@@ -15,5 +15,5 @@ galaxy_info:
   galaxy_tags:
   - system
   dependencies:
-  - name: betacloud.docker
-    src: git+https://github.com/betacloud/ansible-docker.git
+  - name: osism.docker
+    src: git+https://github.com/osism/ansible-docker.git

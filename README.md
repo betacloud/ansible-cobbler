@@ -1,4 +1,4 @@
-# Ansible betacloud.docker-cobbler
+# Ansible osism.cobbler
 
 ![Ansible 2.2](https://img.shields.io/badge/Ansible-2.2-green.png?style=flat)
 ![Ansible 2.3](https://img.shields.io/badge/Ansible-2.3-green.png?style=flat)
@@ -25,7 +25,7 @@ limitations under the License.
 Author information
 ------------------
 
-This role was created by [Betacloud Solutions GmbH](https://betacloud-solutions.de).
+This role was created by [Betacloud Solutions GmbH](https://www.betacloud-solutions.de).
 
 Notices
 -------
