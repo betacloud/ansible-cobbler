@@ -30,4 +30,4 @@
     include_vars: vars/molecule.yml
 
   roles:
-  - role: ansible-docker-cobbler
+  - role: ansible-cobbler

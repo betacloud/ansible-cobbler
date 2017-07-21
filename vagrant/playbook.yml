@@ -31,4 +31,4 @@
     include_vars: vars/vagrant.yml
 
   roles:
-  - role: ../../ansible-docker-cobbler
+  - role: ../../ansible-cobbler
