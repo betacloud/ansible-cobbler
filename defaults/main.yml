@@ -3,10 +3,10 @@ action: deploy
 
 # directories
 
-cobbler_configuration_directory: /opt/cobbler-configuration
-cobbler_data_directory: /opt/cobbler-data
-cobbler_image_directory: /opt/cobbler-image
-cobbler_www_directory: /opt/cobbler-www
+cobbler_configuration_directory: /opt/cobbler/configuration
+cobbler_data_directory: /opt/cobbler/data
+cobbler_image_directory: /opt/cobbler/image
+cobbler_www_directory: /opt/cobbler/www
 
 # http parameters
 
