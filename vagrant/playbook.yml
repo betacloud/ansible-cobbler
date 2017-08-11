@@ -15,10 +15,6 @@
 - name: Playbook for preparations
   hosts: all
 
-  pre_tasks:
-  - name: Include vagrant variables
-    include_vars: vars/vagrant.yml
-
   roles:
   - role: osism.docker
 
@@ -26,9 +22,8 @@
   hosts: all
   connection: paramiko
 
-  pre_tasks:
-  - name: Include vagrant variables
-    include_vars: vars/vagrant.yml
+  vars:
+    cobbler_dhcp_interface: enp0s3
 
   roles:
   - role: ../../ansible-cobbler

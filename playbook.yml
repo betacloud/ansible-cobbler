@@ -14,20 +14,12 @@
 - name: Playbook for role preparations
   hosts: all
 
-  pre_tasks:
-  - name: Include molecule variables
-    include_vars: vars/molecule.yml
-
   roles:
   - role: osism.docker
 
 - name: Playbook for role testing
   hosts: all
   connection: paramiko
-
-  pre_tasks:
-  - name: Include molecule variables
-    include_vars: vars/molecule.yml
 
   roles:
   - role: ansible-cobbler

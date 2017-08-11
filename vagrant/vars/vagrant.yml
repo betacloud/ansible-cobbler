@@ -1,6 +1,0 @@
----
-cobbler_dhcp_interface: enp0s3
-cobbler_dhcp_nameserver: 10.0.2.3
-cobbler_dhcp_netmask: 255.255.255.0
-cobbler_dhcp_router: 10.0.2.3
-cobbler_dhcp_subnet: 10.0.2.0
