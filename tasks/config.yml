@@ -7,7 +7,7 @@
     path: "{{ cobbler_configuration_directory }}"
     mode: 0755
     owner: "{{ operator_user }}"
-    group: "{{ operator_user }}"
+    group: "{{ operator_group }}"
   become: true
 
 - name: Create data directory
@@ -16,7 +16,7 @@
     path: "{{ cobbler_data_directory }}"
     mode: 0755
     owner: "{{ operator_user }}"
-    group: "{{ operator_user }}"
+    group: "{{ operator_group }}"
   become: true
 
 - name: Create image directory
@@ -25,7 +25,7 @@
     path: "{{ cobbler_image_directory }}"
     mode: 0755
     owner: "{{ operator_user }}"
-    group: "{{ operator_user }}"
+    group: "{{ operator_group }}"
   become: true
 
 - name: Create www directory
@@ -34,7 +34,7 @@
     path: "{{ cobbler_www_directory }}"
     mode: 0755
     owner: "{{ operator_user }}"
-    group: "{{ operator_user }}"
+    group: "{{ operator_group }}"
   become: true
 
 - name: Copy configuration templates
@@ -43,7 +43,7 @@
     dest: "{{ cobbler_configuration_directory }}/{{ item }}"
     mode: 0644
     owner: "{{ operator_user }}"
-    group: "{{ operator_user }}"
+    group: "{{ operator_group }}"
   with_items:
     - 000-default.conf
     - dhcp.template
@@ -65,7 +65,7 @@
     dest: "{{ cobbler_configuration_directory }}/users.digest"
     mode: 0644
     owner: "{{ operator_user }}"
-    group: "{{ operator_user }}"
+    group: "{{ operator_group }}"
 
 - name: Copy cobbler wrapper script
   template:

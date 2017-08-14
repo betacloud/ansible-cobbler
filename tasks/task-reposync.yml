@@ -3,7 +3,7 @@
 ---
 - name: Sync repositories
   cobbler:
-    server_url: "http://{{ cobbler_host }}:{{ cobbler_http_port }}/cobbler_api"
+    server_url: "http://{{ cobbler_host }}:{{ cobbler_port }}/cobbler_api"
     username: "{{ cobbler_username }}"
     password: "{{ cobbler_password }}"
     action: reposync

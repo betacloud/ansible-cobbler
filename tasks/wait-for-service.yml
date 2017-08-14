@@ -4,5 +4,5 @@
 - name: Wait for availability of service
   wait_for:
     host: "{{ cobbler_host }}"
-    port: "{{ cobbler_http_port }}"
+    port: "{{ cobbler_port }}"
     delay: 10

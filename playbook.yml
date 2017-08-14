@@ -15,6 +15,7 @@
   hosts: all
 
   roles:
+  - role: osism.operator
   - role: osism.docker
 
 - name: Playbook for role testing
