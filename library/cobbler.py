@@ -64,6 +64,14 @@ def main():
             module.exit_json(ansible_facts=dict(cobbler_result=result))
         except Exception as e:
             module.fail_json(msg="get failed: %s" % e)
+    elif action == "del":
+        try:
+            result = connection.remove_item(entity, params["name"], token)
+            if result == "~":
+                module.fail_json(msg="%s %s not found" % (entity, params["name"]))
+            module.exit_json(ansible_facts=dict(cobbler_result=result))
+        except Exception as e:
+            module.fail_json(msg="del failed: %s" % e)
     elif action == "has":
         try:
             result = connection.has_item(entity, params["name"])
