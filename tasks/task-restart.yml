@@ -2,7 +2,10 @@
 # which is part of this repository.
 ---
 - name: Restart container
-  docker_container:
-    name: "{{ cobbler_docker_container_name }}"
-    state: started
-    restart: yes
+  command: "docker restart {{ cobbler_docker_container_name }}"
+
+#- name: Restart container
+#  docker_container:
+#    name: "{{ cobbler_docker_container_name }}"
+#    state: started
+#    restart: yes
