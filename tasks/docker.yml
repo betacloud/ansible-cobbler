@@ -28,3 +28,14 @@
     restart_policy: always
     volumes: "{{ cobbler_volumes }}"
     network_mode: host
+
+- name: Copy wrapper scripts
+  template:
+    src: "wrapper/{{ item }}.j2"
+    dest: "/usr/local/bin/{{ item }}"
+    mode: 0755
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+  become: true
+  with_items:
+    - osism-cobbler
