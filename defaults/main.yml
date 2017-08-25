@@ -93,6 +93,6 @@ cobbler_password: cobbler
 ##########################
 # docker image parameters
 
-cobbler_version: 2.8
-cobbler_docker_image: "{{ docker_registry }}/osism/cobbler:{{ cobbler_version }}"
+cobbler_tag: 2.8
+cobbler_image: "{{ docker_registry }}/osism/cobbler:{{ cobbler_tag }}"
 cobbler_docker_container_name: cobbler

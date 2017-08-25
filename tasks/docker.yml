@@ -3,7 +3,7 @@
 ---
 - name: Pull docker image
   docker_image:
-    name: "{{ cobbler_docker_image }}"
+    name: "{{ cobbler_image }}"
 
 - name: Prepare volume list
   set_fact:
@@ -22,7 +22,7 @@
 - name: Start container
   docker_container:
     name: "{{ cobbler_docker_container_name }}"
-    image: "{{ cobbler_docker_image }}"
+    image: "{{ cobbler_image }}"
     state: started
     recreate: yes
     restart_policy: always
