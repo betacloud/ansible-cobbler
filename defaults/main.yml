@@ -77,6 +77,10 @@ cobbler_systems:
 ##########################
 # dhcp parameters
 
+# cobbler_dhcp_configuration_file: /path/to/static/dhcp/configuration/file
+
+# parameters for included dhcp configuration file template
+
 cobbler_dhcp_interface:
 cobbler_dhcp_nameserver: 172.20.10.10
 cobbler_dhcp_netmask: 255.255.0.0

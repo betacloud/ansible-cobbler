@@ -1,5 +1,3 @@
-# This file is subject to the terms and conditions defined in file 'LICENSE',
-# which is part of this repository.
 ---
 - name: Create required directories
   file:
@@ -24,12 +22,29 @@
     group: "{{ operator_group }}"
   with_items:
     - 000-default.conf
-    - dhcp.template
     - isc-dhcp-server
     - ports.conf
     - settings
     - tftpd.template
   become: false
+
+- name: Copy dhcp configuration template
+  template:
+    src: "dhcp.template.j2"
+    dest: "{{ cobbler_configuration_directory }}/dhcp.template"
+    mode: 0644
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+  when: cobbler_dhcp_configuration_file is not defined
+
+- name: Copy dhcp configuration file
+  template:
+    src: "{{ cobbler_dhcp_configuration_file }}"
+    dest: "{{ cobbler_configuration_directory }}/dhcp.template"
+    mode: 0644
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+  when: cobbler_dhcp_configuration_file is defined
 
 # https://unix.stackexchange.com/questions/45964/scripting-htdigest-c-path-to-file-user-user-password-in-bash
 - name: Generate htdigest
