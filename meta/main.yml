@@ -1,17 +1,17 @@
 ---
 galaxy_info:
   author: Christian Berendt
-  description: Wrapper role for osism/cobbler docker image.
+  description: Role osism.cobbler
   company: Betacloud Solutions GmbH
   license: Apache License 2.0
   min_ansible_version: 2.2
   platforms:
-  - name: Ubuntu
-    versions:
-    - xenial
+    - name: Ubuntu
+      versions:
+        - xenial
   galaxy_tags:
-  - system
-  dependencies:
+    - system
+dependencies:
   - name: osism.docker
     src: git+https://github.com/osism/ansible-docker.git
   - name: osism.operator
