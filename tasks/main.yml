@@ -1,2 +1,3 @@
 ---
-- include: "{{ cobbler_action }}.yml"
+- name: Include tasks required by action
+  include: "{{ cobbler_action }}.yml"

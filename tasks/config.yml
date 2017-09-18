@@ -35,7 +35,7 @@
     mode: 0644
     owner: "{{ operator_user }}"
     group: "{{ operator_group }}"
-  when: cobbler_dhcp_configuration_file is not defined
+  when: cobbler_dhcp_configuration_file is not defined or not cobbler_dhcp_configuration_file|length
 
 - name: Copy dhcp configuration file
   template:
@@ -44,27 +44,19 @@
     mode: 0644
     owner: "{{ operator_user }}"
     group: "{{ operator_group }}"
-  when: cobbler_dhcp_configuration_file is defined
+  when: cobbler_dhcp_configuration_file is defined and cobbler_dhcp_configuration_file|length
 
-# https://unix.stackexchange.com/questions/45964/scripting-htdigest-c-path-to-file-user-user-password-in-bash
+# NOTE: https://unix.stackexchange.com/questions/45964/scripting-htdigest-c-path-to-file-user-user-password-in-bash
+
 - name: Generate htdigest
   shell: "echo -n '{{ cobbler_username }}:Cobbler:' && echo -n '{{ cobbler_username }}:Cobbler:{{ cobbler_password }}' | md5sum | awk '{ print $1 }'"
   register: htdigest
   no_log: true
 
-- name: Create htdigest file
+- name: Copy htdigest file
   copy:
     content: "{{ htdigest.stdout }}\n"
     dest: "{{ cobbler_configuration_directory }}/users.digest"
     mode: 0644
     owner: "{{ operator_user }}"
     group: "{{ operator_group }}"
-
-- name: Copy cobbler wrapper script
-  template:
-    src: cobbler.j2
-    dest: /usr/local/bin/cobbler
-    mode: 0755
-    owner: root
-    group: root
-  become: true

@@ -13,6 +13,13 @@
 - name: Playbook for preparations
   hosts: all
 
+  vars:
+    operator_user: ubuntu
+    operator_group: ubuntu
+    operator_user_id: 1000
+    operator_group_id: 1000
+    docker_user: ubuntu
+
   roles:
   - role: osism.operator
   - role: osism.docker
@@ -27,6 +34,8 @@
     cobbler_dhcp_netmask: 255.255.255.0
     cobbler_dhcp_router: 10.0.2.3
     cobbler_dhcp_subnet: 10.0.2.0
+    operator_user: ubuntu
+    operator_group: ubuntu
 
   roles:
   - role: ../../ansible-cobbler

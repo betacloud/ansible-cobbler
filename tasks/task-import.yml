@@ -9,16 +9,17 @@
     params:
       name: "{{ distro.name }}-{{ distro.arch }}"
 
-- set_fact:
+- name: Set distro_exsits fact
+  set_fact:
     distro_exists: "{{ cobbler_result }}"
 
-- name: Download ISO file
+- name: Download iso file
   get_url:
     url: "{{ distro.url }}"
     dest: "{{ cobbler_image_directory }}/{{ distro.name }}.iso"
   when: not distro_exists
 
-- name: Mount ISO files
+- name: Mount iso file
   mount:
     name: "{{ cobbler_image_directory }}/{{ distro.name }}"
     src: "{{ cobbler_image_directory }}/{{ distro.name }}.iso"
@@ -29,17 +30,18 @@
   when: not distro_exists
 
 # NOTE: Mounted files only visible after a restart of the container
+
 - include: task-restart.yml
   when: not distro_exists
 
 - include: wait-for-service.yml
   when: not distro_exists
 
-- name: Import files from mounted ISO file
+- name: Import files from mounted iso file
   command: "docker exec -t {{ cobbler_docker_container_name }} cobbler import --name {{ distro.name }} --path /mnt/{{ distro.name }} --arch {{ distro.arch }}"
   when: not distro_exists
 
-#- name: Import files from mounted ISO file
+#- name: Import files from mounted iso file
 #  cobbler:
 #    server_url: "http://{{ cobbler_host }}:{{ cobbler_port }}/cobbler_api"
 #    username: "{{ cobbler_username }}"
@@ -51,7 +53,7 @@
 #      path: "/mnt/{{ distro.name }}"
 #  when: not distro_exists
 
-- name: Unmount ISO files
+- name: Umount iso files
   mount:
     name: "{{ cobbler_image_directory }}/{{ distro.name }}"
     state: unmounted

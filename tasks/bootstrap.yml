@@ -19,7 +19,7 @@
 
 #- include: task-reposync.yml
 
-- name: Copy public SSH key
+- name: Copy public ssh key
   copy:
     content: "{{ cobbler_public_key }}"
     dest: "{{ cobbler_www_directory }}/pub/cobbler.pub"
