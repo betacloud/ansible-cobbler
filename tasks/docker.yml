@@ -36,4 +36,4 @@
     group: "{{ operator_group }}"
   become: true
   with_items:
-    - osism-cobbler
+    - cobbler
