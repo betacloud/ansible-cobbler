@@ -23,7 +23,6 @@
     src: "{{ profile.file }}"
     dest: "{{ cobbler_data_directory}}/kickstarts/{{ profile.file|basename }}"
   become: true
-  when: not profile_exists
 
 - name: Add profile
   cobbler:
