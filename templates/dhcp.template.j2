@@ -71,8 +71,6 @@ group {
         } else {
             filename "undionly.kpxe";
         }
-        #else
-        filename "$iface.filename";
         #end if
         ## Cobbler defaults to $next_server, but some users
         ## may like to use $iface.system.server for proxied setups
