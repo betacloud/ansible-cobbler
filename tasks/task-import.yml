@@ -1,5 +1,5 @@
 ---
-- name: Check if distro exists
+- name: Check if distribution {{ distro.name }} exists
   cobbler:
     username: "{{ cobbler_username }}"
     password: "{{ cobbler_password }}"
@@ -9,17 +9,19 @@
     params:
       name: "{{ distro.name }}-{{ distro.arch }}"
 
-- name: Set distro_exsits fact
+- name: Set {{ distro.name }} exists fact
   set_fact:
     distro_exists: "{{ cobbler_result }}"
 
-- name: Download iso file
+- name: Download iso image for distribution {{ distro.name }}
   get_url:
     url: "{{ distro.url }}"
     dest: "{{ cobbler_image_directory }}/{{ distro.name }}.iso"
   when: not distro_exists
+  async: "{{ cobbler_fetch_image_timeout }}"
+  poll: 2
 
-- name: Mount iso file
+- name: Mount iso image for distribution {{ distro.name }}
   mount:
     name: "{{ cobbler_image_directory }}/{{ distro.name }}"
     src: "{{ cobbler_image_directory }}/{{ distro.name }}.iso"
@@ -37,7 +39,7 @@
 - include: wait-for-service.yml
   when: not distro_exists
 
-- name: Import files from mounted iso file
+- name: Import files from iso image for distribution {{ distro.name }}
   command: "docker exec -t {{ cobbler_docker_container_name }} cobbler import --name {{ distro.name }} --path /mnt/{{ distro.name }} --arch {{ distro.arch }}"
   when: not distro_exists
 
@@ -53,7 +55,7 @@
 #      path: "/mnt/{{ distro.name }}"
 #  when: not distro_exists
 
-- name: Umount iso files
+- name: Unmount iso image for distribution {{ distro.name }}
   mount:
     name: "{{ cobbler_image_directory }}/{{ distro.name }}"
     state: unmounted
