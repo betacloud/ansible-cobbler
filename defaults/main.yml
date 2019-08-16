@@ -29,6 +29,11 @@ cobbler_server_url: "http://{{ cobbler_host }}:{{ cobbler_port }}/cobbler_api"
 cobbler_mail_address: cobbler@osism.io
 
 ##########################
+# image fetching task timeout in seconds
+
+cobbler_fetch_image_timeout: 300
+
+##########################
 # distributions
 
 cobbler_distributions:
