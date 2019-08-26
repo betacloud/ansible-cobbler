@@ -1,35 +1,18 @@
 ---
-- name: Check if profile exists
-  cobbler:
-    username: "{{ cobbler_username }}"
-    password: "{{ cobbler_password }}"
-    server_url: "{{ cobbler_server_url }}"
-    entity: profile
-    action: has
-    params:
-      name: "{{ profile.name }}"
-
-- set_fact:
-    profile_exists: "{{ cobbler_result }}"
-
-- name: Prepare params
-  set_fact:
-    profile_params: 
-      name: "{{ profile.name }}"
-      kickstart: "/var/lib/cobbler/kickstarts/{{ profile.file|basename }}"
-
-- name: Copy profile
+- name: Copy auto-installation profile
   copy:
-    src: "{{ profile.file }}"
-    dest: "{{ cobbler_data_directory}}/kickstarts/{{ profile.file|basename }}"
+    src: "{{ cobbler_files_directory }}/{{ profile.kickstart }}"
+    dest: "{{ cobbler_data_directory }}/kickstarts/{{ profile.kickstart }}"
   become: true
 
-- name: Add profile
+- name: Add profile {{ profile.name }}
   cobbler:
     username: "{{ cobbler_username }}"
     password: "{{ cobbler_password }}"
     server_url: "{{ cobbler_server_url }}"
     entity: profile
-    action: new
-    params: "{{ profile_params | combine(profile.params) }}"
-  when: not profile_exists
+    action: add
+    params:
+      name: "{{ profile.name }}"
+      distro: "{{ profile.distro }}"
+      kickstart: "/var/lib/cobbler/kickstarts/{{ profile.kickstart }}"
