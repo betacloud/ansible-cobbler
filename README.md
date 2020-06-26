@@ -1,3 +1,7 @@
+**This project is no longer maintained.**
+
+MAAS is used for the provisioning of bare-metal systems. Therefore this role is no longer needed within OSISM and is no longer maintained.
+
 # Ansible osism.cobbler
 
 ![Ansible 2.2](https://img.shields.io/badge/Ansible-2.2-green.png?style=flat)
