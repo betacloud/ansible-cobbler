@@ -12,13 +12,14 @@
 
 - name: Playbook for preparations
   hosts: all
+  tags: [ prepare ]
 
   vars:
-    operator_user: ubuntu
-    operator_group: ubuntu
+    operator_user: vagrant
+    operator_group: vagrant
     operator_user_id: 1000
     operator_group_id: 1000
-    docker_user: ubuntu
+    docker_user: vagrant
 
   roles:
   - role: osism.operator
@@ -26,16 +27,18 @@
 
 - name: Playbook for role testing
   hosts: all
+  tags: [ cobbler ]
   connection: paramiko
 
   vars:
-    cobbler_dhcp_interface: enp0s3
-    cobbler_dhcp_nameserver: 10.0.2.3
+    cobbler_files_directory: ../files
+    cobbler_dhcp_interface: docker0
+    cobbler_dhcp_nameserver: 172.17.0.1
     cobbler_dhcp_netmask: 255.255.255.0
-    cobbler_dhcp_router: 10.0.2.3
-    cobbler_dhcp_subnet: 10.0.2.0
-    operator_user: ubuntu
-    operator_group: ubuntu
+    cobbler_dhcp_router: 172.17.0.1
+    cobbler_dhcp_subnet: 172.17.0.0
+    operator_user: vagrant
+    operator_group: vagrant
 
   roles:
   - role: ../../ansible-cobbler

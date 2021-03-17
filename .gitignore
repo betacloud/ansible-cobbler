@@ -1,7 +1,9 @@
 .molecule
 .tox
 *.retry
-tests/__pycache__
+__pycache__/
+*.pyc
 .cache
 .vagrant
 vars/molecule.yml
+.venv

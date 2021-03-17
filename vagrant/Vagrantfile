@@ -1,11 +1,24 @@
 Vagrant.configure("2") do |config|
   config.vm.define "ubuntu" do |ubuntu|
-    ubuntu.vm.box = "ubuntu/xenial64"
+    ubuntu.vm.box = "yk0/ubuntu-xenial"
     ubuntu.vm.hostname = "cobbler-ubuntu"
     ubuntu.vm.synced_folder ".", "/vagrant", disabled: true
+    ubuntu.vm.provision "file", source: "../files/ubuntu-server-xenial-sample.preseed", destination: "/tmp/ubuntu-server-xenial-sample.preseed"
+    ubuntu.vm.provision "shell" do |sh|
+      $deploy_seed_file = <<-SCRIPT
+      mkdir -p /opt/configuration/environments/infrastructure/files/cobbler
+      mv /tmp/ubuntu-server-xenial-sample.preseed /opt/configuration/environments/infrastructure/files/cobbler/ubuntu-server-xenial-sample.preseed
+      chown -R vagrant: /opt/configuration
+      SCRIPT
+      sh.inline = $deploy_seed_file
+    end
     ubuntu.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbook.yml"
       ansible.galaxy_role_file = '../test-requirements.yml'
+      ansible.extra_vars = {
+        "ansible_ssh_user" => "vagrant",
+      }
+      ansible.raw_arguments = ENV['ANSIBLE_ARGS']
     end
     # NOTE: https://groups.google.com/forum/#!topic/vagrant-up/eZljy-bddoI
     #       This will remove the ubuntu-xenial-16.04-cloudimg-console.log file

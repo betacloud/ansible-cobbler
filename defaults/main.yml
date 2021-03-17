@@ -15,7 +15,9 @@ operator_group: "{{ operator_user }}"
 ##########################
 # directories
 
+configuration_directory: /opt/configuration
 cobbler_configuration_directory: /opt/cobbler/configuration
+cobbler_files_directory: "{{ configuration_directory }}/environments/infrastructure/files/cobbler"
 cobbler_data_directory: /opt/cobbler/data
 cobbler_image_directory: /opt/cobbler/image
 cobbler_www_directory: /opt/cobbler/www
@@ -31,7 +33,7 @@ cobbler_mail_address: cobbler@osism.io
 ##########################
 # image fetching task timeout in seconds
 
-cobbler_fetch_image_timeout: 300
+cobbler_fetch_image_timeout: 600
 
 ##########################
 # distributions
@@ -46,38 +48,35 @@ cobbler_distributions:
 
 cobbler_profiles:
   - name: ubuntu-server-xenial-sample
-    file: ubuntu-server-xenial-sample.preseed
-    params:
-      distro: ubuntu-server-xenial-x86_64
+    distro: ubuntu-server-xenial-x86_64
+    kickstart: ubuntu-server-xenial-sample.preseed
 
 ##########################
 # repositories
 
 cobbler_repositories:
   - name: ubuntu-xenial
-    params:
-      apt_components: main
-      apt_dists: xenial
-      arch: x86_64
-      breed: apt
-      mirror: http://de.archive.ubuntu.com/ubuntu/
+    apt_components: main
+    apt_dists: xenial
+    arch: x86_64
+    breed: apt
+    mirror: http://de.archive.ubuntu.com/ubuntu/
 
 ##########################
 # systems
 
 cobbler_systems:
   - name: sample
-    params:
-      power_address: 172.16.100.10
-      power_pass: password
-      power_type: ipmilan
-      power_user: user
-      profile: ubuntu-server-xenial-sample
-      interfaces:
-        ip_address-eno1: 172.20.100.10
-        mac_address-eno1: aa:aa:aa:aa:aa:aa
-      kernel_options:
-        "netcfg/choose_interface": eno1
+    power_address: 172.16.100.10
+    power_pass: password
+    power_type: ipmilan
+    power_user: user
+    profile: ubuntu-server-xenial-sample
+    interfaces:
+      ip_address-eno1: 172.20.100.10
+      mac_address-eno1: aa:aa:aa:aa:aa:aa
+    kernel_options:
+      "netcfg/choose_interface": eno1
 
 ##########################
 # dhcp parameters

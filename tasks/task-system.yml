@@ -1,28 +1,9 @@
 ---
-- name: Check if system exists
+- name: Add system {{ system.name }}
   cobbler:
     username: "{{ cobbler_username }}"
     password: "{{ cobbler_password }}"
     server_url: "{{ cobbler_server_url }}"
     entity: system
-    action: has
-    params:
-      name: "{{ system.name }}"
-
-- name: Prepare params
-  set_fact:
-    system_params:
-      name: "{{ system.name }}"
-
-- set_fact:
-    system_exists: "{{ cobbler_result }}"
-
-- name: Add system
-  cobbler:
-    username: "{{ cobbler_username }}"
-    password: "{{ cobbler_password }}"
-    server_url: "{{ cobbler_server_url }}"
-    entity: system
-    action: new
-    params: "{{ system_params | combine(system.params) }}"
-  when: not system_exists
+    action: add
+    params: "{{ system }}"
